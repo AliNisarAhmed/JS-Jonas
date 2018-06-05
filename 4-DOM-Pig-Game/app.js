@@ -13,11 +13,32 @@ const scores = [0, 0];
 const roundScore = 0;
 const activePlayer = 0;
 
-const dice = Math.floor(Math.random() * 6 + 1);
+// const dice = Math.floor(Math.random() * 6 + 1);
 
-document.querySelector(`#current-${activePlayer}`).textContent = dice;
+// document.querySelector(`#current-${activePlayer}`).textContent = dice;
+
+document.getElementById('score-0').textContent = '0';
+document.getElementById('score-1').textContent = '0';
+document.getElementById('current-0').textContent = '0';
+document.getElementById('current-1').textContent = '0';
+
 
 document.querySelector('.dice').style.display = "none";
+
+document.querySelector('.btn-roll').addEventListener('click', () => {
+  let dice = Math.floor(Math.random() * 6 + 1);
+
+  let diceDOM = document.querySelector('.dice');
+
+  diceDOM.style.display = 'block';
+  diceDOM.src = `dice-${dice}.png`;
+})
+
+
+
+
+
+
 
 
 
