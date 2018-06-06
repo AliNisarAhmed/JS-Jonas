@@ -38,18 +38,7 @@ document.querySelector('.btn-roll').addEventListener('click', () => {
     roundScore += dice;
     document.querySelector(`#current-${activePlayer}`).textContent = roundScore;
   } else {
-    activePlayer = activePlayer === 0 ? 1: 0;
-    roundScore = 0;
-    
-    //when 1 appears, make the current score of activePlayer to zero
-    document.getElementById('current-0').textContent = 0;
-    document.getElementById('current-1').textContent = 0;
-
-    // change active player class
-    document.querySelector('.player-0-panel').classList.toggle('active');
-    document.querySelector('.player-1-panel').classList.toggle('active');
-
-    document.querySelector('.dice').style.display = "none";
+    nextPlayer();
   }
 });
 
@@ -62,17 +51,36 @@ document.querySelector('.btn-hold').addEventListener('click', () => {
   // update the UI
 
   document.querySelector(`#score-${activePlayer}`).textContent = scores[activePlayer];
-
-  // change active player
-
-  activePlayer = activePlayer === 0? 1: 0;
   
   // check if the holding player won the game
 
+  if(scores[activePlayer] >= 10) {
+    document.querySelector(`#name-${activePlayer}`).textContent = 'Winner!';
+    document.querySelector('.dice').style.display = "none";
+    document.querySelector(`.player-${activePlayer}-panel`).classList.add('winner');
+    document.querySelector(`.player-${activePlayer}-panel`).classList.remove('active');
+    // document.querySelector(`.player-${activePlayer}-panel`).classList.add('player-name');
+  } else {
+    // give turn to next player
+    nextPlayer();
 
+  }
 });
 
+function nextPlayer() {
+  activePlayer = activePlayer === 0 ? 1: 0;
+  roundScore = 0;
+  
+  //when 1 appears, make the current score of activePlayer to zero
+  document.getElementById('current-0').textContent = 0;
+  document.getElementById('current-1').textContent = 0;
 
+  // change active player class
+  document.querySelector('.player-0-panel').classList.toggle('active');
+  document.querySelector('.player-1-panel').classList.toggle('active');
+
+  document.querySelector('.dice').style.display = "none";
+}
 
 
 
