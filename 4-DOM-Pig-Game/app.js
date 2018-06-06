@@ -9,7 +9,7 @@ GAME RULES:
 
 */
 
-let scores, roundScore, activePlayer, gamePlaying; //gamePlaying is a state Var
+let scores, roundScore, activePlayer, gamePlaying, lastRoll; //gamePlaying is a state Var
 
 init();  //starts the game
 
@@ -17,7 +17,8 @@ init();  //starts the game
 document.querySelector('.btn-roll').addEventListener('click', () => {
   if(gamePlaying) {
     let dice = Math.floor(Math.random() * 6 + 1);
-
+    console.log("dice: ", dice);
+    console.log("lastRoll: ", lastRoll);
 
     // Display the dice roll result - update image
     let diceDOM = document.querySelector('.dice');
@@ -25,11 +26,17 @@ document.querySelector('.btn-roll').addEventListener('click', () => {
     diceDOM.src = `dice-${dice}.png`;
 
     //update round score and add to current score
-    if (dice !== 1) {
+    if (dice === 1) {
+      nextPlayer();
+    } else if (lastRoll === 6 && dice === 6 ) {
+      scores[activePlayer] = 0;
+      console.log('player scores: ', scores);  
+      document.querySelector(`#score-${activePlayer}`).textContent = 0;
+      nextPlayer();
+    } else {
+      lastRoll = dice;
       roundScore += dice;
       document.querySelector(`#current-${activePlayer}`).textContent = roundScore;
-    } else {
-      nextPlayer();
     }
   }
 });
@@ -48,7 +55,7 @@ document.querySelector('.btn-hold').addEventListener('click', () => {
     
     // check if the holding player won the game
 
-    if(scores[activePlayer] >= 10) {
+    if(scores[activePlayer] >= 100) {
       document.querySelector(`#name-${activePlayer}`).textContent = 'Winner!';
       document.querySelector('.dice').style.display = "none";
       document.querySelector(`.player-${activePlayer}-panel`).classList.add('winner');
@@ -69,6 +76,7 @@ document.querySelector('.btn-hold').addEventListener('click', () => {
 function nextPlayer() {
   activePlayer = activePlayer === 0 ? 1: 0;
   roundScore = 0;
+  lastRoll = 0;
   
   //when 1 appears, make the current score of activePlayer to zero
   document.getElementById('current-0').textContent = 0;
@@ -88,6 +96,7 @@ function init() {
   activePlayer = 0;
   roundScore = 0;
   gamePlaying = true;
+  lastRoll = 0;
 
   document.getElementById('score-0').textContent = '0';
   document.getElementById('score-1').textContent = '0';
