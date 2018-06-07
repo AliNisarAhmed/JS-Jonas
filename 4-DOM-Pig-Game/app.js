@@ -9,33 +9,39 @@ GAME RULES:
 
 */
 
-let scores, roundScore, activePlayer, gamePlaying, lastRoll; //gamePlaying is a state Var
+let scores, roundScore, activePlayer, gamePlaying, lastRoll_1, lastRoll_2, winningScore; //gamePlaying is a state Var
 
 init();  //starts the game
+
+// document.querySelector('#input').addEventListener('submit', (event) => {
+//   console.log(event.target);
+// });
 
 
 document.querySelector('.btn-roll').addEventListener('click', () => {
   if(gamePlaying) {
-    let dice = Math.floor(Math.random() * 6 + 1);
-    console.log("dice: ", dice);
-    console.log("lastRoll: ", lastRoll);
+    let dice_1 = Math.floor(Math.random() * 6 + 1);
+    let dice_2 = Math.floor(Math.random() * 6 + 1);
 
     // Display the dice roll result - update image
-    let diceDOM = document.querySelector('.dice');
-    diceDOM.style.display = 'block';
-    diceDOM.src = `dice-${dice}.png`;
+    let diceDOM_1 = document.querySelector('.dice-1');
+    let diceDOM_2 = document.querySelector('.dice-2');
+    diceDOM_1.style.display = 'block';
+    diceDOM_2.style.display = 'block';
+    diceDOM_1.src = `dice-${dice_1}.png`;
+    diceDOM_2.src = `dice-${dice_2}.png`;
 
     //update round score and add to current score
-    if (dice === 1) {
+    if (dice_1 === 1 || dice_2 === 1) {
       nextPlayer();
-    } else if (lastRoll === 6 && dice === 6 ) {
+    } else if (lastRoll_1 === 6 && dice_1 === 6 && lastRoll_2 === 6 && dice_2 === 6 ) {
       scores[activePlayer] = 0;
-      console.log('player scores: ', scores);  
       document.querySelector(`#score-${activePlayer}`).textContent = 0;
       nextPlayer();
     } else {
-      lastRoll = dice;
-      roundScore += dice;
+      lastRoll_1 = dice_1;
+      lastRoll_2 = dice_2;
+      roundScore += dice_1 + dice_2;
       document.querySelector(`#current-${activePlayer}`).textContent = roundScore;
     }
   }
@@ -55,9 +61,16 @@ document.querySelector('.btn-hold').addEventListener('click', () => {
     
     // check if the holding player won the game
 
-    if(scores[activePlayer] >= 100) {
+    let input = document.querySelector('#input').value;
+
+    winningScore = input ? input: 100;
+
+    if(scores[activePlayer] >= winningScore) {
       document.querySelector(`#name-${activePlayer}`).textContent = 'Winner!';
-      document.querySelector('.dice').style.display = "none";
+
+      document.querySelector('.dice-1').style.display = "none";
+      document.querySelector('.dice-2').style.display = "none";
+
       document.querySelector(`.player-${activePlayer}-panel`).classList.add('winner');
       document.querySelector(`.player-${activePlayer}-panel`).classList.remove('active');
 
@@ -76,7 +89,8 @@ document.querySelector('.btn-hold').addEventListener('click', () => {
 function nextPlayer() {
   activePlayer = activePlayer === 0 ? 1: 0;
   roundScore = 0;
-  lastRoll = 0;
+  lastRoll_1 = 0;
+  lastRoll_2 = 0;
   
   //when 1 appears, make the current score of activePlayer to zero
   document.getElementById('current-0').textContent = 0;
@@ -86,7 +100,8 @@ function nextPlayer() {
   document.querySelector('.player-0-panel').classList.toggle('active');
   document.querySelector('.player-1-panel').classList.toggle('active');
 
-  document.querySelector('.dice').style.display = "none";
+  document.querySelector('.dice-1').style.display = "none";
+  document.querySelector('.dice-2').style.display = "none";
 }
 
 document.querySelector('.btn-new').addEventListener('click', init);
@@ -98,12 +113,16 @@ function init() {
   gamePlaying = true;
   lastRoll = 0;
 
+  // winningScore = document.querySelector('#input').value || 100;
+  // console.log(winningScore);
+
   document.getElementById('score-0').textContent = '0';
   document.getElementById('score-1').textContent = '0';
   document.getElementById('current-0').textContent = '0';
   document.getElementById('current-1').textContent = '0';
 
-  document.querySelector('.dice').style.display = "none";
+  document.querySelector('.dice-2').style.display = "none";
+  document.querySelector('.dice-1').style.display = "none";
 
   document.querySelector('#name-0').textContent = 'Player 1';
   document.querySelector('#name-1').textContent = 'Player 2';

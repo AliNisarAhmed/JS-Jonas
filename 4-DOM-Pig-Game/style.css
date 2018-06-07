@@ -141,14 +141,68 @@ i {
 .btn-roll { top: 403px;}
 .btn-hold { top: 467px;}
 
-.dice {
+.dice-1 {
     position: absolute;
     left: 50%;
-    top: 178px;
+    top: 270px;
     transform: translateX(-50%);
     height: 100px;
     box-shadow: 0px 10px 60px rgba(0, 0, 0, 0.10);
 }
 
+.dice-2 {
+  position: absolute;
+  left: 50%;
+  top: 148px;
+  transform: translateX(-50%);
+  height: 100px;
+  box-shadow: 0px 10px 60px rgba(0, 0, 0, 0.10);
+}
+
 .winner { background-color: #f7f7f7; }
 .winner .player-name { font-weight: 300; color: #EB4D4D; }
+
+#input {
+  width: 23%;
+  height: 30px;
+  position: absolute;
+  top: 17%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  border: 1px solid gray;
+  box-shadow: 0px 5px 10px 2px rgba(0, 0, 0, 0.1);
+  padding: 6px 8px;
+  border-radius: 100px;
+  display: inline-block;
+  text-align: center;
+}
+
+#input:focus {
+  outline: none;
+  border: 2px solid #EB4d4d;
+}
+
+.submit {
+  width: 13%;
+  height: 30px;
+  position: absolute;
+  top: 23%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  border: 1px solid gray;
+  box-shadow: 0px 5px 10px 2px rgba(0, 0, 0, 0.1);
+  padding: 7px;
+  display: inline-block;
+  border-radius: 100px;
+  background-color: #EB4D4D;
+  color: white;
+}
+
+.submit:hover {
+  color: black;
+  background-color: white;
+  font-weight: bold;
+}
+
