@@ -2,10 +2,36 @@
 // ====== BUDGET Controller ====== //
 
 const budgetController = (function () {
- 
+  
+  class Expense {
+    constructor(id, descr, value) {
+      this.id = id;
+      this.descr = descr;
+      this.value = value;
+    }
+  }
+
+  class Income {
+    constructor(id, descr, value) {
+      this.id = id;
+      this.descr = descr;
+      this.value = value;
+    }
+  }
+
+  const data = {
+
+    allItems: {
+      exp: [],
+      inc: [],  
+    },
+    totals: {
+      exp: 0,
+      inc: 0,
+    }
+  }
+
 })();
-
-
 
 
 // ====== UI Controller ====== //
