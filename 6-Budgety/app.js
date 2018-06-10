@@ -48,14 +48,26 @@ const UIController = (function() {
 
 const controller = (function(bdgtCntrl, UICntrl) {
 
-  const DOM = UICntrl.getDOMStrings();
+  const setupEventListeners = function() {
+   
+    const DOM = UICntrl.getDOMStrings();
+    
+    document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
+
+    document.addEventListener('keypress', (event) => {
+      if(event.key === "Enter") {
+        ctrlAddItem();
+      }
+    });   
+  
+  
+  };
 
   const ctrlAddItem = function () {
 
     // 1. Get the field input data
 
     const input = UICntrl.getInput();
-    console.log(input);
 
 
     // 2. Add the item to the budget controller
@@ -67,12 +79,14 @@ const controller = (function(bdgtCntrl, UICntrl) {
     // 5. Display the budget in the UI
   }
   
-  document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
-
-  document.addEventListener('keypress', (event) => {
-    if(event.key === "Enter") {
-      ctrlAddItem();
+  return {
+    init: function() {
+      console.log("Application has started");
+      setupEventListeners();
     }
-  });
+  }; 
 
 })(budgetController, UIController);
+
+
+controller.init();
