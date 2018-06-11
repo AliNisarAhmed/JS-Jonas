@@ -44,7 +44,7 @@ const budgetController = (function () {
   }
 
   return {
-    addItem: function(type, desc, val) {
+    addItem: function(type, desc, val) { // add exp or inc in database
       
       let newItem, ID;
 
@@ -124,6 +124,10 @@ const UIController = (function() {
     inputBtn: '.add__btn',
     incomeContainer: ".income__list",
     expensesContainer: ".expenses__list",
+    budgetLabel: '.budget__value',
+    incomeLabel: '.budget__income--value',
+    expensesLabel: '.budget__expenses--value',
+    percentageLabel: '.budget__expenses--percentage',
   }
 
   return {
@@ -164,13 +168,13 @@ const UIController = (function() {
         html =  `<div class="item clearfix" id="expense-${obj.id}"><div class="item__description">${obj.description}</div><div class="right clearfix"><div class="item__value">${obj.value}</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>`;
       }
       
-      document.querySelector(element).insertAdjacentHTML('beforeend', html);
       // replace the placeholder text with some actual data
-
-          // Done with template strings
-
+      
+      // Done with template strings
+      
       // Insert HTML into the DOM
-
+      
+      document.querySelector(element).insertAdjacentHTML('beforeend', html);
 
     },
 
@@ -183,6 +187,24 @@ const UIController = (function() {
       }
 
       fields[0].focus();
+
+    },
+
+    displayBudget: function(obj) {
+
+      document.querySelector(DOMStrings.budgetLabel).textContent = obj.budget;
+      document.querySelector(DOMStrings.incomeLabel).textContent = obj.totalIncome;
+      document.querySelector(DOMStrings.expensesLabel).textContent = obj.totalExpenses;
+      
+      if(obj.percentage > 0) {
+        
+        document.querySelector(DOMStrings.percentageLabel).textContent = obj.percentage + '%';
+
+      } else {
+
+        document.querySelector(DOMStrings.percentageLabel).textContent = '--';
+
+      }
 
     },
 
@@ -221,11 +243,11 @@ const controller = (function(bdgtCntrl, UICntrl) {
 
     // 2. Returns the budget
 
-    const {budget} = bdgtCntrl.getBudget();
+    const budgetObj = bdgtCntrl.getBudget();
 
     // 5. Display the budget in the UI
 
-    console.log(budget);
+    UICntrl.displayBudget(budgetObj);
   
   };
 
@@ -263,6 +285,12 @@ const controller = (function(bdgtCntrl, UICntrl) {
   return {
     init: function() {
       console.log("Application has started");
+      UICntrl.displayBudget({
+        budget: 0,
+        percentage: -1,
+        totalIncome: 0,
+        totalExpenses: 0,
+      });
       setupEventListeners();
     }
   }; 
