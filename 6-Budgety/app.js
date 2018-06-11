@@ -96,13 +96,13 @@ const UIController = (function() {
       const type = document.querySelector(DOMStrings.inputType).value; // will be either inc or exp
 
       const description = document.querySelector(DOMStrings.inputDescription).value;
-
-      const value = document.querySelector(DOMStrings.inputValue).value;
+ 
+      const value = parseFloat(document.querySelector(DOMStrings.inputValue).value);
 
       return {
-        type: type,
-        description: description,
-        value: value
+        type,
+        description,
+        value,
       };
     },
 
@@ -177,6 +177,16 @@ const controller = (function(bdgtCntrl, UICntrl) {
   
   };
 
+  const updateBudget = function() {
+
+    // 1. Calculate the Budget
+
+    // 2. Returns the budget
+
+    // 5. Display the budget in the UI
+  
+  };
+
   const ctrlAddItem = function () {
 
     let input, newItem;
@@ -185,22 +195,27 @@ const controller = (function(bdgtCntrl, UICntrl) {
 
     input = UICntrl.getInput();
 
+    if(input.description !== '' && !isNaN(input.value) && input.value > 0) {
+      // 2. Add the item to the budget controller
 
-    // 2. Add the item to the budget controller
+      newItem = bdgtCntrl.addItem(input.type, input.description, input.value)
 
-    newItem = bdgtCntrl.addItem(input.type, input.description, input.value)
+      // 3. Add the item to the UI
 
-    // 3. Add the item to the UI
+      UICntrl.addListItem(newItem, input.type);
 
-    UICntrl.addListItem(newItem, input.type);
+      // 3a. Clear the fields
 
-    // 3a. Clear the fields
+      UICntrl.clearFields();
 
-    UICntrl.clearFields();
+      // The last two steps of calculating the budget and updating the UI have been moved to a separate function so that the func may be used when we delete the entries.
 
-    // 4. Calculate the Budget
+      // calculate and update Budget
 
-    // 5. Display the budget in the UI
+      updateBudget();
+      
+    }
+    
   }
   
   return {
