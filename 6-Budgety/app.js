@@ -186,6 +186,13 @@ const UIController = (function() {
 
     },
 
+    deleteListItem: function(selectorID) {
+
+      let el = document.getElementById(selectorID);
+      el.parentNode.removeChild(el)
+
+    },
+
     clearFields: function() {  // clear the fields once user has clicked or pressed Enter
 
       let fields = Array.from(document.querySelectorAll(DOMStrings.inputDescription + ', ' + DOMStrings.inputValue));  // IMPORTANT
@@ -306,7 +313,11 @@ const controller = (function(bdgtCntrl, UICntrl) {
 
       // delete item from the UI
 
+      UICntrl.deleteListItem(clickedItemID);
+
       // update and show the new Budget
+
+      updateBudget();
 
     }
   
