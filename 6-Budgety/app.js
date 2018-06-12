@@ -44,7 +44,7 @@ const budgetController = (function () {
   }
 
   return {
-    addItem: function(type, desc, val) { // add exp or inc in database
+    addItem: function(type, desc, val) { // add exp or inc in database and returns it
       
       let newItem, ID;
 
@@ -70,6 +70,13 @@ const budgetController = (function () {
       // Return  the new Element
       return newItem;
       
+    },
+
+    deleteItem: function(type, id) {  // receives type and id from controller when user clicks the delete button on a particular entry
+
+      let itemIndex = data.allItems[type].findIndex(item => item.id === id);
+      data.allItems[type].splice(itemIndex, 1);
+
     },
     
     calculateBudget: function() {
@@ -128,11 +135,12 @@ const UIController = (function() {
     incomeLabel: '.budget__income--value',
     expensesLabel: '.budget__expenses--value',
     percentageLabel: '.budget__expenses--percentage',
+    container: '.container',
   }
 
   return {
 
-    getInput : function () {
+    getInput : function () {  // gets user input from the 3 fields
       const type = document.querySelector(DOMStrings.inputType).value; // will be either inc or exp
 
       const description = document.querySelector(DOMStrings.inputDescription).value;
@@ -146,11 +154,11 @@ const UIController = (function() {
       };
     },
 
-    getDOMStrings: function() {
+    getDOMStrings: function() { 
       return DOMStrings;
     },
 
-    addListItem: function(obj, type) {
+    addListItem: function(obj, type) {  // add new item into html as either inc or exp
 
       let html, element;
 
@@ -159,13 +167,13 @@ const UIController = (function() {
 
         element = DOMStrings.incomeContainer;
 
-        html =  `<div class="item clearfix" id="income-${obj.id}"><div class="item__description">${obj.description}</div><div class="right clearfix"><div class="item__value">${obj.value}</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>`;
+        html =  `<div class="item clearfix" id="inc-${obj.id}"><div class="item__description">${obj.description}</div><div class="right clearfix"><div class="item__value">${obj.value}</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>`;
 
       } else {
 
         element = DOMStrings.expensesContainer;
 
-        html =  `<div class="item clearfix" id="expense-${obj.id}"><div class="item__description">${obj.description}</div><div class="right clearfix"><div class="item__value">${obj.value}</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>`;
+        html =  `<div class="item clearfix" id="exp-${obj.id}"><div class="item__description">${obj.description}</div><div class="right clearfix"><div class="item__value">${obj.value}</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>`;
       }
       
       // replace the placeholder text with some actual data
@@ -178,19 +186,19 @@ const UIController = (function() {
 
     },
 
-    clearFields: function() {
+    clearFields: function() {  // clear the fields once user has clicked or pressed Enter
 
-      let fields = Array.from(document.querySelectorAll(DOMStrings.inputDescription + ', ' + DOMStrings.inputValue));
+      let fields = Array.from(document.querySelectorAll(DOMStrings.inputDescription + ', ' + DOMStrings.inputValue));  // IMPORTANT
 
       for(let elem of fields) {
         elem.value = '';
       }
 
-      fields[0].focus();
+      fields[0].focus();  // to bring focus back to the decription field
 
     },
 
-    displayBudget: function(obj) {
+    displayBudget: function(obj) { // displays budget on html, receives budgetObj, which is the output of getBudget method on budgetController
 
       document.querySelector(DOMStrings.budgetLabel).textContent = obj.budget;
       document.querySelector(DOMStrings.incomeLabel).textContent = obj.totalIncome;
@@ -232,7 +240,8 @@ const controller = (function(bdgtCntrl, UICntrl) {
       }
     });   
   
-  
+    document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem)
+
   };
 
   const updateBudget = function() {
@@ -281,6 +290,27 @@ const controller = (function(bdgtCntrl, UICntrl) {
     }
     
   }
+
+  const ctrlDeleteItem = function(event) {
+    
+    let clickedItemID = event.target.parentNode.parentNode.parentNode.parentNode.id;
+
+    if(clickedItemID) {
+
+      // inc-id or exp-id is the format of ID returned from html node
+      let [type, ID] = clickedItemID.split('-');
+
+      // delete item frm the database
+
+      bdgtCntrl.deleteItem(type, Number(ID));
+
+      // delete item from the UI
+
+      // update and show the new Budget
+
+    }
+  
+  };
   
   return {
     init: function() {
