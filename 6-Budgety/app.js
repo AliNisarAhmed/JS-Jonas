@@ -12,6 +12,20 @@ const budgetController = (function () {
       this.id = id;
       this.description = description;
       this.value = value;
+      this.percentage = -1;
+    }
+
+    calcPercentage(totalIncome) {
+
+      if(totalIncome > 0) {
+        this.percentage = Math.round((this.value / totalIncome) * 100);
+      } else {
+        this.percentage = -1;
+      }
+    }
+    
+    getPercentage() {
+      return this.percentage;
     }
   }
 
@@ -99,6 +113,18 @@ const budgetController = (function () {
 
     },
 
+    calculatePercentages: function() {
+
+      data.allItems.exp.forEach(cur => cur.calcPercentage(data.totals.inc));
+
+    },
+
+    getPercentages: function() {
+
+      return data.allItems.exp.map(cur => cur.getPercentage());
+
+    },
+
     getBudget: function() {
       return {
         budget: data.budget,
@@ -136,6 +162,7 @@ const UIController = (function() {
     expensesLabel: '.budget__expenses--value',
     percentageLabel: '.budget__expenses--percentage',
     container: '.container',
+    expensesPercentageLabel: '.item__percentage',
   }
 
   return {
@@ -223,6 +250,14 @@ const UIController = (function() {
 
     },
 
+    displayPercentages: function(percentages) {
+
+      let fields = Array.from(document.querySelectorAll(DOMStrings.expensesPercentageLabel));
+      
+      fields.forEach((field, i) => field.textContent = percentages[i] + "%");
+
+    },
+
   };
 
 })();
@@ -267,6 +302,22 @@ const controller = (function(bdgtCntrl, UICntrl) {
   
   };
 
+  const updatePercentages = function() {
+
+    // Calculate Percentages
+
+    bdgtCntrl.calculatePercentages();
+
+    // read percentages from Budget Controller
+
+    let percentages = bdgtCntrl.getPercentages();
+
+    // Update UI
+
+    UICntrl.displayPercentages(percentages);
+
+  };
+
   const ctrlAddItem = function () {
 
     let input, newItem;
@@ -294,6 +345,10 @@ const controller = (function(bdgtCntrl, UICntrl) {
 
       updateBudget();
 
+      // Calculate and update percentages
+
+      updatePercentages();
+
     }
     
   }
@@ -318,6 +373,10 @@ const controller = (function(bdgtCntrl, UICntrl) {
       // update and show the new Budget
 
       updateBudget();
+
+      // Calculate and update percentages
+
+      updatePercentages();
 
     }
   
