@@ -143,9 +143,16 @@ const budgetController = (function () {
 })();
 
 
+
+
+
 //=================================================
 // ================ UI Controller ============== //
 //=================================================
+
+
+
+
 
 
 const UIController = (function() {
@@ -163,6 +170,24 @@ const UIController = (function() {
     percentageLabel: '.budget__expenses--percentage',
     container: '.container',
     expensesPercentageLabel: '.item__percentage',
+  };
+
+  function formatNumber(num, type) { // format all numbers in +/- x,000.00
+
+    num = Math.abs(num).toFixed(2);  //toFixed converts num to string
+    let [int, dec] = num.split('.');
+    
+    if(int.length > 3) {
+      int = int.substr(0, int.length - 3) + ',' + int.substr(int.length - 3);
+    } 
+    
+    // else if(int.length > 6) {
+    //   int = int.substr(0, int.length - 6) + ',' + int.substr(int.length - 6, int.length - 3) + int.substr(0, int.length - 3) + ',' + int.substr(int.length - 3); 
+    // }
+
+    let sign = type === 'exp' ? '-' : '+';
+
+    return sign + ' ' + int + '.' + dec;
   }
 
   return {
@@ -194,13 +219,13 @@ const UIController = (function() {
 
         element = DOMStrings.incomeContainer;
 
-        html =  `<div class="item clearfix" id="inc-${obj.id}"><div class="item__description">${obj.description}</div><div class="right clearfix"><div class="item__value">${obj.value}</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>`;
+        html =  `<div class="item clearfix" id="inc-${obj.id}"><div class="item__description">${obj.description}</div><div class="right clearfix"><div class="item__value">${formatNumber(obj.value, type)}</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>`;
 
       } else {
 
         element = DOMStrings.expensesContainer;
 
-        html =  `<div class="item clearfix" id="exp-${obj.id}"><div class="item__description">${obj.description}</div><div class="right clearfix"><div class="item__value">${obj.value}</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>`;
+        html =  `<div class="item clearfix" id="exp-${obj.id}"><div class="item__description">${obj.description}</div><div class="right clearfix"><div class="item__value">${formatNumber(obj.value, type)}</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>`;
       }
       
       // replace the placeholder text with some actual data
@@ -234,9 +259,11 @@ const UIController = (function() {
 
     displayBudget: function(obj) { // displays budget on html, receives budgetObj, which is the output of getBudget method on budgetController
 
-      document.querySelector(DOMStrings.budgetLabel).textContent = obj.budget;
-      document.querySelector(DOMStrings.incomeLabel).textContent = obj.totalIncome;
-      document.querySelector(DOMStrings.expensesLabel).textContent = obj.totalExpenses;
+      let type = obj.budget > 0 ? 'inc' : 'exp'; 
+
+      document.querySelector(DOMStrings.budgetLabel).textContent = formatNumber(obj.budget, type);
+      document.querySelector(DOMStrings.incomeLabel).textContent = formatNumber(obj.totalIncome, 'inc');
+      document.querySelector(DOMStrings.expensesLabel).textContent = formatNumber(obj.totalExpenses, 'exp');
       
       if(obj.percentage > 0) {
         
@@ -263,9 +290,13 @@ const UIController = (function() {
 })();
 
 
+
+
+
 //===============================================
 // ============== APP Controller ============= //
 //===============================================
+
 
 
 const controller = (function(bdgtCntrl, UICntrl) {
