@@ -170,6 +170,7 @@ const UIController = (function() {
     percentageLabel: '.budget__expenses--percentage',
     container: '.container',
     expensesPercentageLabel: '.item__percentage',
+    dateLabel: '.budget__title--month',
   };
 
   function formatNumber(num, type) { // format all numbers in +/- x,000.00
@@ -284,6 +285,16 @@ const UIController = (function() {
       fields.forEach((field, i) => field.textContent = percentages[i] + "%");
 
     },
+
+    displayMonth: function() {
+      let now = new Date();
+
+      let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', "September", 'October', "November", "December",]
+
+      let year = now.getFullYear();
+      let month = now.getMonth();
+      document.querySelector(DOMStrings.dateLabel).textContent = months[month] + ' ' + year;
+    }
 
   };
 
@@ -416,6 +427,7 @@ const controller = (function(bdgtCntrl, UICntrl) {
   return {
     init: function() {
       console.log("Application has started");
+      UICntrl.displayMonth();
       UICntrl.displayBudget({
         budget: 0,
         percentage: -1,
