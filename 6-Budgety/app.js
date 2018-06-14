@@ -294,7 +294,21 @@ const UIController = (function() {
       let year = now.getFullYear();
       let month = now.getMonth();
       document.querySelector(DOMStrings.dateLabel).textContent = months[month] + ' ' + year;
-    }
+    },
+
+    changeColorOnType: function(event) {
+      let fields = Array.from(document.querySelectorAll(`
+        ${DOMStrings.inputType},
+        ${DOMStrings.inputDescription},
+        ${DOMStrings.inputValue}
+      `));
+
+      fields.forEach(elem => {
+        elem.classList.toggle('red-focus');
+      });
+
+      document.querySelector(DOMStrings.inputBtn).classList.toggle('red')
+    } 
 
   };
 
@@ -325,6 +339,8 @@ const controller = (function(bdgtCntrl, UICntrl) {
     });   
   
     document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem)
+
+    document.querySelector(DOM.inputType).addEventListener('change', UICntrl.changeColorOnType)
 
   };
 
