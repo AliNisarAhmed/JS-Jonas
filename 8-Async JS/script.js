@@ -73,14 +73,55 @@ const getRelated = publisher => {
 //     console.log('error :', error);
 //   });
 
-async function getRecipesAW () {
-  const IDs = await getIDs;
-  console.log('IDs :', IDs);
-  const recipe = await getRecipe(IDs[2]);
-  console.log('recipe :', recipe);
-  const related = await getRelated('ali');
-  console.log('related :', related);
+// async function getRecipesAW () {
+//   const IDs = await getIDs;
+//   console.log('IDs :', IDs);
+//   const recipe = await getRecipe(IDs[2]);
+//   console.log('recipe :', recipe);
+//   const related = await getRelated('ali');
+//   console.log('related :', related);
 
-  return recipe;
+//   return recipe;
+// }
+// getRecipesAW().then(result => console.log('result :', result));
+
+
+// function getWeather(woeid) {
+
+//   fetch(`https://cors-anywhere.herokuapp.com/https://www.metaweather.com/api/location/${woeid}/`)
+//   .then(result => {
+//     return result.json();
+//   })
+//   .then(data => {
+//     // console.log('data :', data);
+//     const today = data.consolidated_weather[0];
+//     console.log(`Temperatures in ${data.title} stay between ${today.min_temp} and ${today.max_temp}`);
+//   })
+//   .catch(error => console.log('error :', error));
+// }
+
+// // getWeather(2487956);
+
+// fetch(`https://cors-anywhere.herokuapp.com/https://www.metaweather.com/api/location/search/?query=karachi`)
+// .then(result => result.json())
+// .then(data => {
+//   return data[0].woeid;
+// })
+// .then(woeid => {
+//   getWeather(woeid);
+// });
+
+async function getWeatherAW (woeid) {
+  const result = await fetch(`https://cors-anywhere.herokuapp.com/https://www.metaweather.com/api/location/${woeid}/`);
+  console.log('result :', result);
+  const data = await result.json();
+  const today = data.consolidated_weather[0];
+  console.log(`Temperatures in ${data.title} stay between ${today.min_temp} and ${today.max_temp}`);
+
+  // const woeid = data[0].woeid;
+
+  // const result2 = await fetch(`https://cors-anywhere.herokuapp.com/https://www.metaweather.com/api/location/${woeid}/`);
+  // const data2 = await result2.json();
 }
-getRecipesAW().then(result => console.log('result :', result));
+
+getWeatherAW(2211096);
