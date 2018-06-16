@@ -1,5 +1,25 @@
-import str from './models/Search';
-import { add, multiply, ID } from "./views/searchView";
-// import * as searchView from "./views/searchView"
+import axios from 'axios';
 
-console.log(`using imported functions add ${add(ID, 2)} and multiple ${multiply(3, 5)}, ${str}`);
+// b74b520e46a90335918b9b3f83db4f74
+
+// http://food2fork.com/api/search 
+
+// http://food2fork.com/api/get
+
+// https://cors-anywhere.herokuapp.com/
+
+async function getResult(query) {
+  const proxy = "https://cors-anywhere.herokuapp.com/"
+  const key = "b74b520e46a90335918b9b3f83db4f74";
+  try {
+
+    const res = await axios.get(`${proxy}http://food2fork.com/api/search?key=${key}&q=${query}`);
+    const recipes = res.data.recipes;
+    console.log('recipes :', recipes);
+
+  } catch(error) {
+    alert(error);
+  }
+}
+
+getResult('tomato pasta');
