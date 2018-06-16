@@ -1,7 +1,5 @@
-// Global app controller
+import str from './models/Search';
+import { add, multiply, ID } from "./views/searchView";
+// import * as searchView from "./views/searchView"
 
-
-import num from './test';
-
-const x = 23;
-console.log(`I have imported num: ${num} from test.js, variable x: ${x} is local though`);
+console.log(`using imported functions add ${add(ID, 2)} and multiple ${multiply(3, 5)}, ${str}`);
