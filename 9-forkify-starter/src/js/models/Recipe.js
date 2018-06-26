@@ -95,4 +95,18 @@ export default class Recipe {
 
     this.ingredients = newIngredients;
   }
+
+  updateServings(type)  { //type is either + or - depending on incr or decr button clicked by user
+
+    // Servings
+    const newServings = type === 'dec' ? this.servings - 1: this.servings + 1;
+
+    // Ingredients
+
+    this.ingredients.forEach(ing => {
+      ing.count *= (newServings / this.servings);
+    });
+
+    this.servings = newServings;
+  }
 }
