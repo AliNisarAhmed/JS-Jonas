@@ -2,7 +2,8 @@ import Search from "./models/Search"
 import * as searchView from "./views/searchView";
 import * as recipeView from "./views/recipeView";
 import { elements, renderLoader, elementStrings, clearLoader } from "./views/base";
-import Recipe from "./models/Recipe"
+import Recipe from "./models/Recipe";
+import List from "./models/List";
 
 
 /* GLOBAL STATE of the app
@@ -75,7 +76,7 @@ const controlRecipe = async () => {
   
   // GET THE RECIPE ID FROM THE URL
   const id = window.location.hash.replace("#", "");
-  console.log('id :', id);
+  console.log('i d :', id);
 
 
   if (id) {
@@ -100,7 +101,7 @@ const controlRecipe = async () => {
       // get recipe data and parse ingredients
       
       await state.recipe.getRecipe();
-      console.log('state.recipe.ingredients :', state.recipe.ingredients);
+      // console.log('state.recipe.ingredients :', state.recipe.ingredients);
       state.recipe.parseIngredients();  
 
       // calculate servings and time
@@ -150,4 +151,6 @@ elements.recipe.addEventListener('click', e => {
   
   }
 
-})
+});
+
+window.l = new List();
